@@ -5,15 +5,10 @@ import time
 import f1_gss_manipulator
 import f1_slack_client
 import f1_cxense_client
+import f1_formatter
 
 def unixtime(date):
   return int(time.mktime(date.timetuple()))
-
-def format_for_slack(find_str, daily_kpi, monthly_kpi):
-  formatted = find_str + "\n"
-  formatted += ("PV:" + format(daily_kpi["events"],",d") + "\nUU:" + format(daily_kpi["uniqueUsers"],",d") + "\n")
-  formatted += ("累積PV:" + format(monthly_kpi["events"],",d") + "\n累積UU:" + format(monthly_kpi["uniqueUsers"],",d"))
-  return formatted
 
 if __name__ == "__main__":
   if (len(sys.argv) > 3) or (len(sys.argv) < 2):
@@ -50,9 +45,9 @@ if __name__ == "__main__":
     # write to spreadsheet
     f1_gss_manipulator.update_bk_kpi(find_str, daily_kpi["data"], monthly_kpi["data"])
     # post to slack channel
-    f1_slack_client.post_to_bk_analytics_channel(format_for_slack(find_str, daily_kpi["data"], monthly_kpi["data"]))
+    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.for_bk_slack(find_str, daily_kpi["data"], monthly_kpi["data"]))
   elif media == 'SK':
     daily_kpi = f1_cxense_client.sk_daily_kpi(start_time_for_pv, end_time_for_pv)
     monthly_kpi = f1_cxense_client.sk_monthly_kpi(start_time_for_uu, end_time_for_uu)
     # post to slack channel
-    f1_slack_client.post_to_sk_analytics_channel(format_for_slack(find_str, daily_kpi["data"], monthly_kpi["data"]))
+    f1_slack_client.post_to_sk_analytics_channel(f1_formatter.for_sk_slack(find_str, daily_kpi["data"], monthly_kpi["data"]))
