@@ -66,8 +66,6 @@ def for_sk_slack(find_str, daily_kpi, monthly_kpi):
   lapsed_days = days - remaining_days
   estimate_monthly_pv = (monthly_kpi["events"]/lapsed_days)*remaining_days+monthly_kpi["events"]
   estimate_monthly_uu = (monthly_kpi["uniqueUsers"]/lapsed_days)*remaining_days+monthly_kpi["uniqueUsers"]
-  estimate_achievement_rate_of_monthly_pv = float(estimate_monthly_pv)/bk_monthly_target_pv()
-  estimate_achievement_rate_of_monthly_uu = float(estimate_monthly_uu)/bk_monthly_target_uu()
 
   formatted = "------------------------ " + find_str + " ------------------------\n"
   formatted += "[Daily KPI]\n"
@@ -77,8 +75,8 @@ def for_sk_slack(find_str, daily_kpi, monthly_kpi):
   formatted += "残り日数:" + str(remaining_days) + "\n"
   formatted += "累積PV:" + format(monthly_kpi["events"],",d")
   if remaining_days != 0:
-    formatted += "(着地予測:" + format(estimate_monthly_pv, ",d") + "[" + format(estimate_achievement_rate_of_monthly_pv, ".1%") + "])"
+    formatted += "(着地予測:" + format(estimate_monthly_pv, ",d") + ")"
   formatted += "\n累積UU:" + format(monthly_kpi["uniqueUsers"],",d")
   if remaining_days != 0:
-    formatted += "(着地予測:" + format(estimate_monthly_uu, ",d") + "[" + format(estimate_achievement_rate_of_monthly_uu, ".1%") + "])"
+    formatted += "(着地予測:" + format(estimate_monthly_uu, ",d") + ")"
   return formatted
