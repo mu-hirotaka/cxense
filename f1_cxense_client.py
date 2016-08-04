@@ -9,11 +9,11 @@ def config():
 
 def bk_site_id():
   key = config()
-  return key["bk_site_id"]
+  return key["bk"]["site_id"]
 
 def sk_site_id():
   key = config()
-  return key["sk_site_id"]
+  return key["sk"]["site_id"]
 
 def api_script_path():
   return os.path.join(os.path.dirname(__file__), 'cx.py')

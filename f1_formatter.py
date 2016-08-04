@@ -48,7 +48,6 @@ def for_bk_slack(find_str, daily_kpi, monthly_kpi):
   formatted += "、目標比:" + format(achievement_rate_of_daily_pv, ".2%")
   formatted += "、差分:" +  format(diff_of_daily_pv, ",d") + ")\n"
   formatted += "UU:" + format(daily_kpi["uniqueUsers"],",d") + "\n"
-  print achievement_rate_of_daily_pv
   if achievement_rate_of_daily_pv >= 0.9:
     formatted += BOT_COMMENT[0]
   elif achievement_rate_of_daily_pv < 0.5:
