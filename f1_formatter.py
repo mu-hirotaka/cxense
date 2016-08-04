@@ -4,6 +4,11 @@ import datetime
 import json
 import os
 
+BOT_COMMENT = [
+  "目標までもう一踏ん張り。今日こそ達成を目指そう。\n",
+  "昨日の結果は散々だったな。今日は頑張ろうな。\n"
+]
+
 def config():
   key = json.load(open(os.path.join(os.path.expanduser('~'), '.cxense', 'kpi.json')))
   return key
@@ -40,11 +45,14 @@ def for_bk_slack(find_str, daily_kpi, monthly_kpi):
   formatted = "------------------------ " + find_str + " ------------------------\n"
   formatted += "[Daily KPI]\n"
   formatted += "PV:" + format(daily_kpi["events"], ",d") + "(目標:" + format(bk_daily_target_pv(),",d")
-  formatted += "、目標比:" + format(achievement_rate_of_daily_pv, ".1%")
+  formatted += "、目標比:" + format(achievement_rate_of_daily_pv, ".2%")
   formatted += "、差分:" +  format(diff_of_daily_pv, ",d") + ")\n"
   formatted += "UU:" + format(daily_kpi["uniqueUsers"],",d") + "\n"
-  if achievement_rate_of_daily_pv > 0.9:
-    formatted += "目標までもう一踏ん張り。今日こそ達成を目指そう。\n"
+  print achievement_rate_of_daily_pv
+  if achievement_rate_of_daily_pv >= 0.9:
+    formatted += BOT_COMMENT[0]
+  elif achievement_rate_of_daily_pv < 0.5:
+    formatted += BOT_COMMENT[1]
   formatted += "[Monthly KPI]\n"
   formatted += "残り日数:" + str(remaining_days) + "\n"
   formatted += "累積PV:" + format(monthly_kpi["events"],",d") + "(目標:" + format(bk_monthly_target_pv(),",d")
