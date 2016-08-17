@@ -73,14 +73,14 @@ def sk_segment_name_to_segment_id(segment_name):
 def api_script_path():
   return os.path.join(os.path.dirname(__file__), 'cx.py')
 
-def bk_daily_kpi(start_time, end_time):
+def bk_basic_kpi(start_time, end_time):
   site_id = bk_site_id()
   path = api_script_path()
   request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers"]}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
   return json.loads(response)
 
-def bk_daily_segment_kpi(start_time, end_time):
+def bk_segment_kpi(start_time, end_time):
   site_id = bk_site_id()
   path = api_script_path()
   res = {}
@@ -92,24 +92,14 @@ def bk_daily_segment_kpi(start_time, end_time):
     res.update({segment_name: decoded["data"]})
   return res
 
-def bk_monthly_kpi(start_time, end_time):
-  site_id = bk_site_id()
-  path = api_script_path()
-  request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers"]}\'' % (path, site_id, start_time, end_time)
-  response = commands.getoutput(request_command)
-  return json.loads(response)
-
-def bk_monthly_segment_kpi(start_time, end_time):
-  return bk_daily_segment_kpi(start_time, end_time)
-
-def sk_daily_kpi(start_time, end_time):
+def sk_basic_kpi(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
   request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers"]}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
   return json.loads(response)
 
-def sk_daily_segment_kpi(start_time, end_time):
+def sk_segment_kpi(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
   res = {}
@@ -120,10 +110,3 @@ def sk_daily_segment_kpi(start_time, end_time):
     decoded = json.loads(response)
     res.update({segment_name: decoded["data"]})
   return res
-
-def sk_monthly_kpi(start_time, end_time):
-  site_id = sk_site_id()
-  path = api_script_path()
-  request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers"]}\'' % (path, site_id, start_time, end_time)
-  response = commands.getoutput(request_command)
-  return json.loads(response)
