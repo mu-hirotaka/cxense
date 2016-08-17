@@ -42,10 +42,12 @@ if __name__ == "__main__":
   if media == 'BK':
     daily_kpi = f1_cxense_client.bk_daily_kpi(start_time_for_pv, end_time_for_pv)
     monthly_kpi = f1_cxense_client.bk_monthly_kpi(start_time_for_uu, end_time_for_uu)
+    daily_segment_kpi = f1_cxense_client.bk_daily_segment_kpi(start_time_for_pv, end_time_for_pv)
+    monthly_segment_kpi = f1_cxense_client.bk_monthly_segment_kpi(start_time_for_uu, end_time_for_uu)
     # write to spreadsheet
     f1_gss_manipulator.update_bk_kpi(find_str, daily_kpi["data"], monthly_kpi["data"])
     # post to slack channel
-    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.for_bk_slack(find_str, daily_kpi["data"], monthly_kpi["data"]))
+    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.for_bk_slack(find_str, daily_kpi["data"], monthly_kpi["data"], daily_segment_kpi, monthly_segment_kpi))
   elif media == 'SK':
     daily_kpi = f1_cxense_client.sk_daily_kpi(start_time_for_pv, end_time_for_pv)
     monthly_kpi = f1_cxense_client.sk_monthly_kpi(start_time_for_uu, end_time_for_uu)

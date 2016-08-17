@@ -99,6 +99,9 @@ def bk_monthly_kpi(start_time, end_time):
   response = commands.getoutput(request_command)
   return json.loads(response)
 
+def bk_monthly_segment_kpi(start_time, end_time):
+  return bk_daily_segment_kpi(start_time, end_time)
+
 def sk_daily_kpi(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
