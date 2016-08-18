@@ -40,16 +40,114 @@ if __name__ == "__main__":
 
   # call api 
   if media == 'BK':
+    # request api
     daily_kpi = f1_cxense_client.bk_basic_kpi(start_time_for_pv, end_time_for_pv)
     monthly_kpi = f1_cxense_client.bk_basic_kpi(start_time_for_uu, end_time_for_uu)
-    daily_segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_pv, end_time_for_pv)
-    monthly_segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_uu, end_time_for_uu)
+    segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_pv, end_time_for_pv)
+#    daily_segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_pv, end_time_for_pv)
+#    monthly_segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_uu, end_time_for_uu)
+
+    all_referrer_kpi = f1_cxense_client.bk_basic_kpi_for_each_referrer(start_time_for_pv, end_time_for_pv)
+    search_referrer_kpi = f1_cxense_client.bk_basic_kpi_from_search(start_time_for_pv, end_time_for_pv)
+    social_referrer_kpi = f1_cxense_client.bk_basic_kpi_from_social(start_time_for_pv, end_time_for_pv)
+    other_referrer_kpi = f1_cxense_client.bk_basic_kpi_from_other(start_time_for_pv, end_time_for_pv)
+
+    smartnews_kpi = f1_cxense_client.bk_basic_kpi_from_smartnews(start_time_for_pv, end_time_for_pv)
+    smartnews_ranking = f1_cxense_client.bk_url_uu_ranking_from_smartnews(start_time_for_pv, end_time_for_pv)
+    yahoo_kpi = f1_cxense_client.bk_basic_kpi_from_yahoo(start_time_for_pv, end_time_for_pv)
+    yahoo_ranking = f1_cxense_client.bk_url_uu_ranking_from_yahoo(start_time_for_pv, end_time_for_pv)
+    twitter_kpi = f1_cxense_client.bk_basic_kpi_from_twitter(start_time_for_pv, end_time_for_pv)
+    twitter_ranking = f1_cxense_client.bk_url_uu_ranking_from_twitter(start_time_for_pv, end_time_for_pv)
+    facebook_kpi = f1_cxense_client.bk_basic_kpi_from_facebook(start_time_for_pv, end_time_for_pv)
+    facebook_ranking = f1_cxense_client.bk_url_uu_ranking_from_facebook(start_time_for_pv, end_time_for_pv)
+
+    kpi = {
+        "daily": {
+          "basic": daily_kpi,
+          "segment": segment_kpi,
+          "referrer": {
+            "all": all_referrer_kpi,
+            "search": search_referrer_kpi,
+            "social": social_referrer_kpi,
+            "other": other_referrer_kpi
+          },
+          "smartnews": {
+            "basic": smartnews_kpi,
+            "ranking": smartnews_ranking
+          },
+          "yahoo": {
+            "basic": yahoo_kpi,
+            "ranking": yahoo_ranking
+          },
+          "twitter": {
+            "basic": twitter_kpi,
+            "ranking": twitter_ranking
+          },
+          "facebook": {
+            "basic": facebook_kpi,
+            "ranking": facebook_ranking
+          }
+        },
+        "monthly": {
+          "basic": monthly_kpi
+        },
+    }
+
     # write to spreadsheet
-    f1_gss_manipulator.update_bk_kpi(find_str, daily_kpi["data"], monthly_kpi["data"])
+#    f1_gss_manipulator.update_bk_kpi(find_str, daily_kpi["data"], monthly_kpi["data"])
     # post to slack channel
-    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.for_bk_slack(find_str, daily_kpi["data"], monthly_kpi["data"], daily_segment_kpi, monthly_segment_kpi))
+    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.format_for_bk_slack(find_str, kpi))
+#    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.for_bk_slack(find_str, daily_kpi["data"], monthly_kpi["data"], daily_segment_kpi, monthly_segment_kpi))
   elif media == 'SK':
+    # request api
     daily_kpi = f1_cxense_client.sk_basic_kpi(start_time_for_pv, end_time_for_pv)
     monthly_kpi = f1_cxense_client.sk_basic_kpi(start_time_for_uu, end_time_for_uu)
+    segment_kpi = f1_cxense_client.sk_segment_kpi(start_time_for_pv, end_time_for_pv)
+
+    all_referrer_kpi = f1_cxense_client.sk_basic_kpi_for_each_referrer(start_time_for_pv, end_time_for_pv)
+    search_referrer_kpi = f1_cxense_client.sk_basic_kpi_from_search(start_time_for_pv, end_time_for_pv)
+    social_referrer_kpi = f1_cxense_client.sk_basic_kpi_from_social(start_time_for_pv, end_time_for_pv)
+    other_referrer_kpi = f1_cxense_client.sk_basic_kpi_from_other(start_time_for_pv, end_time_for_pv)
+
+    smartnews_kpi = f1_cxense_client.sk_basic_kpi_from_smartnews(start_time_for_pv, end_time_for_pv)
+    smartnews_ranking = f1_cxense_client.sk_url_uu_ranking_from_smartnews(start_time_for_pv, end_time_for_pv)
+    yahoo_kpi = f1_cxense_client.sk_basic_kpi_from_yahoo(start_time_for_pv, end_time_for_pv)
+    yahoo_ranking = f1_cxense_client.sk_url_uu_ranking_from_yahoo(start_time_for_pv, end_time_for_pv)
+    twitter_kpi = f1_cxense_client.sk_basic_kpi_from_twitter(start_time_for_pv, end_time_for_pv)
+    twitter_ranking = f1_cxense_client.sk_url_uu_ranking_from_twitter(start_time_for_pv, end_time_for_pv)
+    facebook_kpi = f1_cxense_client.sk_basic_kpi_from_facebook(start_time_for_pv, end_time_for_pv)
+    facebook_ranking = f1_cxense_client.sk_url_uu_ranking_from_facebook(start_time_for_pv, end_time_for_pv)
+
+    kpi = {
+        "daily": {
+          "basic": daily_kpi,
+          "segment": segment_kpi,
+          "referrer": {
+            "all": all_referrer_kpi,
+            "search": search_referrer_kpi,
+            "social": social_referrer_kpi,
+            "other": other_referrer_kpi
+          },
+          "smartnews": {
+            "basic": smartnews_kpi,
+            "ranking": smartnews_ranking
+          },
+          "yahoo": {
+            "basic": yahoo_kpi,
+            "ranking": yahoo_ranking
+          },
+          "twitter": {
+            "basic": twitter_kpi,
+            "ranking": twitter_ranking
+          },
+          "facebook": {
+            "basic": facebook_kpi,
+            "ranking": facebook_ranking
+          }
+        },
+        "monthly": {
+          "basic": monthly_kpi
+        },
+    }
     # post to slack channel
-    f1_slack_client.post_to_sk_analytics_channel(f1_formatter.for_sk_slack(find_str, daily_kpi["data"], monthly_kpi["data"]))
+    f1_slack_client.post_to_sk_analytics_channel(f1_formatter.format_for_sk_slack(find_str, kpi))
