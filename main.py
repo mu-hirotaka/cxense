@@ -97,7 +97,6 @@ if __name__ == "__main__":
 #    f1_gss_manipulator.update_bk_kpi(find_str, daily_kpi["data"], monthly_kpi["data"])
     # post to slack channel
     f1_slack_client.post_to_bk_analytics_channel(f1_formatter.format_for_bk_slack(find_str, kpi))
-#    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.for_bk_slack(find_str, daily_kpi["data"], monthly_kpi["data"], daily_segment_kpi, monthly_segment_kpi))
   elif media == 'SK':
     # request api
     daily_kpi = f1_cxense_client.sk_basic_kpi(start_time_for_pv, end_time_for_pv)

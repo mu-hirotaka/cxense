@@ -4,14 +4,13 @@ import datetime
 import json
 import os
 
-BOT_COMMENT = [
-  "目標までもう一踏ん張り。今日こそ達成を目指そう。\n",
-  "昨日の結果は散々だったな。今日は頑張ろうな。\n"
-]
-
 def config():
   key = json.load(open(os.path.join(os.path.expanduser('~'), '.cxense', 'kpi.json')))
   return key
+
+def sk_daily_target_pv():
+  kpi = config()
+  return kpi["sk"]["daily"]["pv"]
 
 def bk_daily_target_pv():
   kpi = config()
@@ -25,148 +24,136 @@ def bk_daily_target_uu():
   kpi = config()
   return kpi["bk"]["daily"]["uu"]
 
+def sk_monthly_target_pv():
+  kpi = config()
+  return kpi["sk"]["monthly"]["pv"]
+
 def bk_monthly_target_pv():
   kpi = config()
   return kpi["bk"]["monthly"]["pv"]
+
+def sk_monthly_target_uu():
+  kpi = config()
+  return kpi["sk"]["monthly"]["uu"]
 
 def bk_monthly_target_uu():
   kpi = config()
   return kpi["bk"]["monthly"]["uu"]
 
-def for_bk_slack(find_str, daily_kpi, monthly_kpi, daily_segment_kpi, monthly_segment_kpi):
-  achievement_rate_of_daily_pv = float(daily_kpi["events"])/bk_daily_target_pv()
-  achievement_rate_of_monthly_pv = float(monthly_kpi["events"])/bk_monthly_target_pv()
-  achievement_rate_of_monthly_uu = float(monthly_kpi["uniqueUsers"])/bk_monthly_target_uu()
-  diff_of_daily_pv = daily_kpi["events"] - bk_daily_target_pv()
-  diff_of_monthly_pv = monthly_kpi["events"] - bk_monthly_target_pv()
-  diff_of_monthly_uu = monthly_kpi["uniqueUsers"] - bk_monthly_target_uu()
-
-  target_date = datetime.datetime.strptime(find_str, '%Y/%m/%d')
-  days = calendar.monthrange(target_date.year,target_date.month)[1]
-  remaining_days = days - target_date.day
-  lapsed_days = days - remaining_days
-  estimate_monthly_pv = (monthly_kpi["events"]/lapsed_days)*remaining_days+monthly_kpi["events"]
-  estimate_monthly_uu = (monthly_kpi["uniqueUsers"]/lapsed_days)*remaining_days+monthly_kpi["uniqueUsers"]
-  estimate_achievement_rate_of_monthly_pv = float(estimate_monthly_pv)/bk_monthly_target_pv()
-  estimate_achievement_rate_of_monthly_uu = float(estimate_monthly_uu)/bk_monthly_target_uu()
-
-  # for segment
-  all_segment_pv_for_daily = daily_segment_kpi["fly_bys"]["events"] + daily_segment_kpi["occasionals"]["events"] + daily_segment_kpi["regulars"]["events"] + daily_segment_kpi["fan"]["events"]
-  rate_of_flybys_daily_pv = float(daily_segment_kpi["fly_bys"]["events"])/all_segment_pv_for_daily
-  rate_of_occasionals_daily_pv = float(daily_segment_kpi["occasionals"]["events"])/all_segment_pv_for_daily
-  rate_of_regulars_daily_pv = float(daily_segment_kpi["regulars"]["events"])/all_segment_pv_for_daily
-  rate_of_fan_daily_pv = float(daily_segment_kpi["fan"]["events"])/all_segment_pv_for_daily
-
-  all_segment_uu_for_daily = daily_segment_kpi["fly_bys"]["uniqueUsers"] + daily_segment_kpi["occasionals"]["uniqueUsers"] + daily_segment_kpi["regulars"]["uniqueUsers"] + daily_segment_kpi["fan"]["uniqueUsers"]
-  rate_of_flybys_daily_uu = float(daily_segment_kpi["fly_bys"]["uniqueUsers"])/all_segment_uu_for_daily
-  rate_of_occasionals_daily_uu = float(daily_segment_kpi["occasionals"]["uniqueUsers"])/all_segment_uu_for_daily
-  rate_of_regulars_daily_uu = float(daily_segment_kpi["regulars"]["uniqueUsers"])/all_segment_uu_for_daily
-  rate_of_fan_daily_uu = float(daily_segment_kpi["fan"]["uniqueUsers"])/all_segment_uu_for_daily
-
-  all_segment_pv_for_monthly = monthly_segment_kpi["fly_bys"]["events"] + monthly_segment_kpi["occasionals"]["events"] + monthly_segment_kpi["regulars"]["events"] + monthly_segment_kpi["fan"]["events"]
-  rate_of_flybys_monthly_pv = float(monthly_segment_kpi["fly_bys"]["events"])/all_segment_pv_for_monthly
-  rate_of_occasionals_monthly_pv = float(monthly_segment_kpi["occasionals"]["events"])/all_segment_pv_for_monthly
-  rate_of_regulars_monthly_pv = float(monthly_segment_kpi["regulars"]["events"])/all_segment_pv_for_monthly
-  rate_of_fan_monthly_pv = float(monthly_segment_kpi["fan"]["events"])/all_segment_pv_for_monthly
-
-  all_segment_uu_for_monthly = monthly_segment_kpi["fly_bys"]["uniqueUsers"] + monthly_segment_kpi["occasionals"]["uniqueUsers"] + monthly_segment_kpi["regulars"]["uniqueUsers"] + monthly_segment_kpi["fan"]["uniqueUsers"]
-  rate_of_flybys_monthly_uu = float(monthly_segment_kpi["fly_bys"]["uniqueUsers"])/all_segment_uu_for_monthly
-  rate_of_occasionals_monthly_uu = float(monthly_segment_kpi["occasionals"]["uniqueUsers"])/all_segment_uu_for_monthly
-  rate_of_regulars_monthly_uu = float(monthly_segment_kpi["regulars"]["uniqueUsers"])/all_segment_uu_for_monthly
-  rate_of_fan_monthly_uu = float(monthly_segment_kpi["fan"]["uniqueUsers"])/all_segment_uu_for_monthly
-
-  formatted = find_str + "\n"
-  formatted += "[Daily KPI]\n"
-  formatted += "PV:" + format(daily_kpi["events"], ",d") + "(目標:" + format(bk_daily_target_pv(),",d")
-  formatted += "、目標比:" + format(achievement_rate_of_daily_pv, ".2%")
-  formatted += "、差分:" +  format(diff_of_daily_pv, ",d") + ")\n"
-  formatted += "　S1:" + format(daily_segment_kpi["fly_bys"]["events"], ",d") + "[" + format(rate_of_flybys_daily_pv, ".1%") + "]"
-  formatted += "、S2:" + format(daily_segment_kpi["occasionals"]["events"], ",d") + "[" + format(rate_of_occasionals_daily_pv, ".1%") + "]"
-  formatted += "、S3:" + format(daily_segment_kpi["regulars"]["events"], ",d") + "[" + format(rate_of_regulars_daily_pv, ".1%") + "]"
-  formatted += "、S4:" + format(daily_segment_kpi["fan"]["events"], ",d") + "[" + format(rate_of_fan_daily_pv, ".1%") + "]\n"
-  formatted += "UU:" + format(daily_kpi["uniqueUsers"],",d") + "\n"
-  formatted += "　S1:" + format(daily_segment_kpi["fly_bys"]["uniqueUsers"], ",d") + "[" + format(rate_of_flybys_daily_uu, ".1%") + "]"
-  formatted += "、S2:" + format(daily_segment_kpi["occasionals"]["uniqueUsers"], ",d") + "[" + format(rate_of_occasionals_daily_uu, ".1%") + "]"
-  formatted += "、S3:" + format(daily_segment_kpi["regulars"]["uniqueUsers"], ",d") + "[" + format(rate_of_regulars_daily_uu, ".1%") + "]"
-  formatted += "、S4:" + format(daily_segment_kpi["fan"]["uniqueUsers"], ",d") + "[" + format(rate_of_fan_daily_uu, ".1%") + "]\n"
-#  if achievement_rate_of_daily_pv >= 0.9:
-#    formatted += BOT_COMMENT[0]
-#  elif achievement_rate_of_daily_pv < 0.5:
-#    formatted += BOT_COMMENT[1]
-  formatted += "[Monthly KPI]\n"
-  formatted += "残り日数:" + str(remaining_days) + "\n"
-  formatted += "累積PV:" + format(monthly_kpi["events"],",d") + "(目標:" + format(bk_monthly_target_pv(),",d")
-  formatted += "、目標比:" + format(achievement_rate_of_monthly_pv, ".1%")
-  formatted += "、差分:" +  format(diff_of_monthly_pv, ",d")
-  if remaining_days != 0:
-    formatted += "、着地予測:" + format(estimate_monthly_pv, ",d") + "[" + format(estimate_achievement_rate_of_monthly_pv, ".1%") + "]"
-  formatted += ")\n"
-  formatted += "　S1:" + format(monthly_segment_kpi["fly_bys"]["events"], ",d") + "[" + format(rate_of_flybys_monthly_pv, ".1%") + "]"
-  formatted += "、S2:" + format(monthly_segment_kpi["occasionals"]["events"], ",d") + "[" + format(rate_of_occasionals_monthly_pv, ".1%") + "]"
-  formatted += "、S3:" + format(monthly_segment_kpi["regulars"]["events"], ",d") + "[" + format(rate_of_regulars_monthly_pv, ".1%") + "]"
-  formatted += "、S4:" + format(monthly_segment_kpi["fan"]["events"], ",d") + "[" + format(rate_of_fan_monthly_pv, ".1%") + "]\n"
-  formatted += "累積UU:" + format(monthly_kpi["uniqueUsers"],",d") + "(目標:" + format(bk_monthly_target_uu(),",d")
-  formatted += "、目標比:" + format(achievement_rate_of_monthly_uu, ".1%")
-  formatted += "、差分:" +  format(diff_of_monthly_uu, ",d")
-  if remaining_days != 0:
-    formatted += "、着地予測:" + format(estimate_monthly_uu, ",d") + "[" + format(estimate_achievement_rate_of_monthly_uu, ".1%") + "]"
-  formatted += ")\n"
-  formatted += "　S1:" + format(monthly_segment_kpi["fly_bys"]["uniqueUsers"], ",d") + "[" + format(rate_of_flybys_monthly_uu, ".1%") + "]"
-  formatted += "、S2:" + format(monthly_segment_kpi["occasionals"]["uniqueUsers"], ",d") + "[" + format(rate_of_occasionals_monthly_uu, ".1%") + "]"
-  formatted += "、S3:" + format(monthly_segment_kpi["regulars"]["uniqueUsers"], ",d") + "[" + format(rate_of_regulars_monthly_uu, ".1%") + "]"
-  formatted += "、S4:" + format(monthly_segment_kpi["fan"]["uniqueUsers"], ",d") + "[" + format(rate_of_fan_monthly_uu, ".1%") + "]\n"
-  return formatted
-
-def for_sk_slack(find_str, daily_kpi, monthly_kpi):
-  target_date = datetime.datetime.strptime(find_str, '%Y/%m/%d')
-  days = calendar.monthrange(target_date.year,target_date.month)[1]
-  remaining_days = days - target_date.day
-  lapsed_days = days - remaining_days
-  estimate_monthly_pv = (monthly_kpi["events"]/lapsed_days)*remaining_days+monthly_kpi["events"]
-  estimate_monthly_uu = (monthly_kpi["uniqueUsers"]/lapsed_days)*remaining_days+monthly_kpi["uniqueUsers"]
-
-  formatted = find_str + "\n"
-  formatted += "[Daily KPI]\n"
-  formatted += "PV:" + format(daily_kpi["events"], ",d") + "\n"
-  formatted += "UU:" + format(daily_kpi["uniqueUsers"],",d") + "\n"
-  formatted += "[Monthly KPI]\n"
-  formatted += "残り日数:" + str(remaining_days) + "\n"
-  formatted += "累積PV:" + format(monthly_kpi["events"],",d")
-  if remaining_days != 0:
-    formatted += "(着地予測:" + format(estimate_monthly_pv, ",d") + ")"
-  formatted += "\n累積UU:" + format(monthly_kpi["uniqueUsers"],",d")
-  if remaining_days != 0:
-    formatted += "(着地予測:" + format(estimate_monthly_uu, ",d") + ")"
-  return formatted
-
 def format_sk_basic_kpi(kpi):
   pv = kpi["data"]["events"]
   uu = kpi["data"]["uniqueUsers"]
-  achievement_rate_of_daily_uu = float(uu)/sk_daily_target_uu()
-  diff_of_daily_uu = uu - sk_daily_target_uu()
+  achievement_rate_of_pv = float(pv)/sk_daily_target_pv()
+  diff_of_pv = pv - sk_daily_target_pv()
+  achievement_rate_of_uu = float(uu)/sk_daily_target_uu()
+  diff_of_uu = uu - sk_daily_target_uu()
 
   messages = []
   messages.append("＜基本KPI＞\n")
-  messages.append("　PV:" + format(pv, ",d") + "\n")
+  messages.append("　PV:" + format(pv, ",d"))
+  messages.append("(目標:" + format(sk_daily_target_pv(), ",d"))
+  messages.append("、目標比:" + format(achievement_rate_of_pv, ".1%"))
+  messages.append("、差分:" + format(diff_of_pv, ",d") + ")\n")
   messages.append("　UU:" + format(uu, ",d"))
   messages.append("(目標:" + format(sk_daily_target_uu(), ",d"))
-  messages.append("、目標比:" + format(achievement_rate_of_daily_uu, ".2%"))
-  messages.append("、差分:" + format(diff_of_daily_uu, ",d") + ")\n")
+  messages.append("、目標比:" + format(achievement_rate_of_uu, ".1%"))
+  messages.append("、差分:" + format(diff_of_uu, ",d") + ")\n")
   return "".join(messages)
 
 def format_bk_basic_kpi(kpi):
   pv = kpi["data"]["events"]
   uu = kpi["data"]["uniqueUsers"]
-  achievement_rate_of_daily_uu = float(uu)/bk_daily_target_uu()
-  diff_of_daily_uu = uu - bk_daily_target_uu()
+  achievement_rate_of_pv = float(pv)/bk_daily_target_pv()
+  diff_of_pv = pv - bk_daily_target_pv()
+  achievement_rate_of_uu = float(uu)/bk_daily_target_uu()
+  diff_of_uu = uu - bk_daily_target_uu()
 
   messages = []
   messages.append("＜基本KPI＞\n")
-  messages.append("　PV:" + format(pv, ",d") + "\n")
+  messages.append("　PV:" + format(pv, ",d"))
+  messages.append("(目標:" + format(bk_daily_target_pv(), ",d"))
+  messages.append("、目標比:" + format(achievement_rate_of_pv, ".1%"))
+  messages.append("、差分:" + format(diff_of_pv, ",d") + ")\n")
   messages.append("　UU:" + format(uu, ",d"))
   messages.append("(目標:" + format(bk_daily_target_uu(), ",d"))
-  messages.append("、目標比:" + format(achievement_rate_of_daily_uu, ".2%"))
-  messages.append("、差分:" + format(diff_of_daily_uu, ",d") + ")\n")
+  messages.append("、目標比:" + format(achievement_rate_of_uu, ".1%"))
+  messages.append("、差分:" + format(diff_of_uu, ",d") + ")\n")
+  return "".join(messages)
+
+def format_sk_montyly_kpi(date_str, kpi):
+  pv = kpi["data"]["events"]
+  uu = kpi["data"]["uniqueUsers"]
+
+  achievement_rate_of_pv = float(pv)/sk_monthly_target_pv()
+  diff_of_pv = pv - sk_monthly_target_pv()
+  achievement_rate_of_uu = float(uu)/sk_monthly_target_uu()
+  diff_of_uu = uu - sk_monthly_target_uu()
+
+  target_date = datetime.datetime.strptime(date_str, '%Y/%m/%d')
+  days = calendar.monthrange(target_date.year,target_date.month)[1]
+  remaining_days = days - target_date.day
+  lapsed_days = days - remaining_days
+
+  estimate_pv = (pv/lapsed_days) * remaining_days + pv
+  estimate_uu = (uu/lapsed_days) * remaining_days + uu
+  estimate_achievement_rate_of_pv = float(estimate_pv)/sk_monthly_target_pv()
+  estimate_achievement_rate_of_uu = float(estimate_uu)/sk_monthly_target_uu()
+
+  messages = []
+  messages.append("＜Monthly KPI＞\n")
+  messages.append("　残り日数:" + str(remaining_days) + "日\n")
+  messages.append("　累積PV:" + format(pv, ",d"))
+  messages.append("(目標:" + format(sk_monthly_target_pv(), ",d"))
+  messages.append("、目標比:" + format(achievement_rate_of_pv, ".1%"))
+  messages.append("、差分:" + format(diff_of_pv, ",d"))
+  if remaining_days != 0:
+    messages.append("、着地予測:" + format(estimate_pv, ",d") + "[" + format(estimate_achievement_rate_of_pv, ".1%") + "]")
+  messages.append(")\n")
+  messages.append("　累積UU:" + format(uu, ",d"))
+  messages.append("(目標:" + format(sk_monthly_target_uu(), ",d"))
+  messages.append("、目標比:" + format(achievement_rate_of_uu, ".1%"))
+  messages.append("、差分:" + format(diff_of_uu, ",d"))
+  if remaining_days != 0:
+    messages.append("、着地予測:" + format(estimate_uu, ",d") + "[" + format(estimate_achievement_rate_of_uu, ".1%") + "]")
+  messages.append(")\n")
+  return "".join(messages)
+
+def format_bk_montyly_kpi(date_str, kpi):
+  pv = kpi["data"]["events"]
+  uu = kpi["data"]["uniqueUsers"]
+
+  achievement_rate_of_pv = float(pv)/bk_monthly_target_pv()
+  diff_of_pv = pv - bk_monthly_target_pv()
+  achievement_rate_of_uu = float(uu)/bk_monthly_target_uu()
+  diff_of_uu = uu - bk_monthly_target_uu()
+
+  target_date = datetime.datetime.strptime(date_str, '%Y/%m/%d')
+  days = calendar.monthrange(target_date.year,target_date.month)[1]
+  remaining_days = days - target_date.day
+  lapsed_days = days - remaining_days
+
+  estimate_pv = (pv/lapsed_days) * remaining_days + pv
+  estimate_uu = (uu/lapsed_days) * remaining_days + uu
+  estimate_achievement_rate_of_pv = float(estimate_pv)/bk_monthly_target_pv()
+  estimate_achievement_rate_of_uu = float(estimate_uu)/bk_monthly_target_uu()
+
+  messages = []
+  messages.append("＜Monthly KPI＞\n")
+  messages.append("　残り日数:" + str(remaining_days) + "日\n")
+  messages.append("　累積PV:" + format(pv, ",d"))
+  messages.append("(目標:" + format(bk_monthly_target_pv(), ",d"))
+  messages.append("、目標比:" + format(achievement_rate_of_pv, ".1%"))
+  messages.append("、差分:" + format(diff_of_pv, ",d"))
+  if remaining_days != 0:
+    messages.append("、着地予測:" + format(estimate_pv, ",d") + "[" + format(estimate_achievement_rate_of_pv, ".1%") + "]")
+  messages.append(")\n")
+  messages.append("　累積UU:" + format(uu, ",d"))
+  messages.append("(目標:" + format(bk_monthly_target_uu(), ",d"))
+  messages.append("、目標比:" + format(achievement_rate_of_uu, ".1%"))
+  messages.append("、差分:" + format(diff_of_uu, ",d"))
+  if remaining_days != 0:
+    messages.append("、着地予測:" + format(estimate_uu, ",d") + "[" + format(estimate_achievement_rate_of_uu, ".1%") + "]")
+  messages.append(")\n")
   return "".join(messages)
 
 def format_kpi_for_each_referrer(each_referrer_response, search_response, social_response, other_response):
@@ -350,6 +337,7 @@ def format_facebook_kpi(kpi):
 
 def format_for_sk_slack(date_str, kpi):
   basic_kpi = kpi["daily"]["basic"]
+  monthly_kpi = kpi["monthly"]["basic"]
   segment_kpi = kpi["daily"]["segment"]
   all_referrer_kpi = kpi["daily"]["referrer"]["all"]
   search_referrer_kpi = kpi["daily"]["referrer"]["search"]
@@ -369,10 +357,12 @@ def format_for_sk_slack(date_str, kpi):
   messages.append(format_yahoo_kpi(yahoo_kpi))
   messages.append(format_twitter_kpi(twitter_kpi))
   messages.append(format_facebook_kpi(facebook_kpi))
+  messages.append(format_sk_montyly_kpi(date_str, monthly_kpi))
   return "".join(messages)
 
 def format_for_bk_slack(date_str, kpi):
   basic_kpi = kpi["daily"]["basic"]
+  monthly_kpi = kpi["monthly"]["basic"]
   segment_kpi = kpi["daily"]["segment"]
   all_referrer_kpi = kpi["daily"]["referrer"]["all"]
   search_referrer_kpi = kpi["daily"]["referrer"]["search"]
@@ -392,4 +382,5 @@ def format_for_bk_slack(date_str, kpi):
   messages.append(format_yahoo_kpi(yahoo_kpi))
   messages.append(format_twitter_kpi(twitter_kpi))
   messages.append(format_facebook_kpi(facebook_kpi))
+  messages.append(format_bk_montyly_kpi(date_str, monthly_kpi))
   return "".join(messages)
