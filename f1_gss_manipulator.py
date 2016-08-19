@@ -11,32 +11,28 @@ def authorize():
   credentials = oauth2client.client.SignedJwtAssertionCredentials(key['client_email'], key['private_key'].encode(), scope)
   return gspread.authorize(credentials)
 
-def update_bk_kpi(find_str, daily_kpi, monthly_kpi):
-  pv = daily_kpi["events"]
-  uu = daily_kpi["uniqueUsers"]
-  pv_sum = monthly_kpi["events"]
-  uu_sum = monthly_kpi["uniqueUsers"]
+def write_down_daily_kpi(media_type, date_str, kpi):
+  daily_kpi = kpi["daily"]["basic"]["data"]
+  monthly_kpi = kpi["monthly"]["basic"]["data"]
+  daily_pv = daily_kpi["events"]
+  daily_uu = daily_kpi["uniqueUsers"]
+  monthly_pv = monthly_kpi["events"]
+  monthly_uu = monthly_kpi["uniqueUsers"]
 
   # 認証
   gc = authorize()
-  workbook = gc.open("BK_KPI")
-  worksheet = workbook.worksheet("KPI")
-  # カラム番号
-  PV_COL_NUM = 2
-  PV_SUM_COL_NUM = 5
-  UU_COL_NUM = 6
-  UU_SUM_COL_NUM = 7
-  try:
-    cell = worksheet.find(find_str)
-    worksheet.update_cell(cell.row, PV_COL_NUM, pv)
-    worksheet.update_cell(cell.row, PV_SUM_COL_NUM, pv_sum)
-    worksheet.update_cell(cell.row, UU_COL_NUM, uu)
-    worksheet.update_cell(cell.row, UU_SUM_COL_NUM, uu_sum)
-  except Exception as e:
-    print '--- Error ---'
-    print 'type:' + str(type(e))
-    print 'message:' + e.message
-    print '-------------'
+  workbook = gc.open("Daily_KPI")
+  worksheet = workbook.worksheet(media_type)
 
-def update_sk_kpi(find_str, daily_kpi, monthly_kpi):
-  pass
+  # カラム番号
+  DAILY_PV_COL_NUM = 2
+  MONTHLY_PV_COL_NUM = 4
+  DAILY_UU_COL_NUM = 5
+  MONTHLY_UU_COL_NUM = 7
+
+  cell = worksheet.find(date_str)
+  worksheet.update_cell(cell.row, DAILY_PV_COL_NUM, daily_pv)
+  worksheet.update_cell(cell.row, MONTHLY_PV_COL_NUM, monthly_pv)
+  worksheet.update_cell(cell.row, DAILY_UU_COL_NUM, daily_uu)
+  worksheet.update_cell(cell.row, MONTHLY_UU_COL_NUM, monthly_uu)
+

@@ -20,7 +20,7 @@ if __name__ == "__main__":
     yesterday = today - datetime.timedelta(days = 1)
     start_date_for_pv = yesterday
     first_date_of_this_month = datetime.date(day=1, month=yesterday.month, year=yesterday.year)
-    find_str = yesterday.strftime('%Y/%m/%d')
+    date_str = yesterday.strftime('%Y/%m/%d')
     # calc start_time, end_time
     start_time_for_pv = unixtime(yesterday)
     end_time_for_pv = start_time_for_pv + 60*60*24-1
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     target_date = datetime.datetime.strptime(sys.argv[2], '%Y%m%d')
     start_date_for_pv = target_date
     first_date_of_this_month = datetime.date(day=1, month=target_date.month, year=target_date.year)
-    find_str = target_date.strftime('%Y/%m/%d')
+    date_str = target_date.strftime('%Y/%m/%d')
     # calc start_time, end_time
     start_time_for_pv = unixtime(start_date_for_pv)
     end_time_for_pv = start_time_for_pv + 60*60*24-1
@@ -44,8 +44,6 @@ if __name__ == "__main__":
     daily_kpi = f1_cxense_client.bk_basic_kpi(start_time_for_pv, end_time_for_pv)
     monthly_kpi = f1_cxense_client.bk_basic_kpi(start_time_for_uu, end_time_for_uu)
     segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_pv, end_time_for_pv)
-#    daily_segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_pv, end_time_for_pv)
-#    monthly_segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_uu, end_time_for_uu)
 
     all_referrer_kpi = f1_cxense_client.bk_basic_kpi_for_each_referrer(start_time_for_pv, end_time_for_pv)
     search_referrer_kpi = f1_cxense_client.bk_basic_kpi_from_search(start_time_for_pv, end_time_for_pv)
@@ -94,9 +92,11 @@ if __name__ == "__main__":
     }
 
     # write to spreadsheet
-#    f1_gss_manipulator.update_bk_kpi(find_str, daily_kpi["data"], monthly_kpi["data"])
+    f1_gss_manipulator.write_down_daily_kpi(media, date_str, kpi)
+
     # post to slack channel
-    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.format_for_bk_slack(find_str, kpi))
+    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.format_for_bk_slack(date_str, kpi))
+
   elif media == 'SK':
     # request api
     daily_kpi = f1_cxense_client.sk_basic_kpi(start_time_for_pv, end_time_for_pv)
@@ -148,5 +148,9 @@ if __name__ == "__main__":
           "basic": monthly_kpi
         },
     }
+
+    # write to spreadsheet
+    f1_gss_manipulator.write_down_daily_kpi(media, date_str, kpi)
+
     # post to slack channel
-    f1_slack_client.post_to_sk_analytics_channel(f1_formatter.format_for_sk_slack(find_str, kpi))
+    f1_slack_client.post_to_sk_analytics_channel(f1_formatter.format_for_sk_slack(date_str, kpi))
