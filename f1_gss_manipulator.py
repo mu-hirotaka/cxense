@@ -28,6 +28,14 @@ FROM_SOCIAL_UU_COL_NUM = 22
 DIRECT_UU_COL_NUM = 23
 FROM_SEARCH_UU_COL_NUM = 24
 INTERNAL_UU_COL_NUM = 25
+SMARTNEWS_PV_COL_NUM = 26
+YAHOO_PV_COL_NUM = 27
+TWITTER_PV_COL_NUM = 28
+FACEBOOK_PV_COL_NUM = 29
+SMARTNEWS_UU_COL_NUM = 30
+YAHOO_UU_COL_NUM = 31
+TWITTER_UU_COL_NUM = 32
+FACEBOOK_UU_COL_NUM = 33
 
 def authorize():
   key = json.load(open(os.path.join(os.path.expanduser('~'), '.cxense', 'gss_key.json')))
@@ -40,6 +48,10 @@ def write_down_daily_kpi(media_type, date_str, kpi):
   monthly_kpi = kpi["monthly"]["basic"]["data"]
   segment_kpi = kpi["daily"]["segment"]
   all_referrer_kpi = kpi["daily"]["referrer"]["all"]
+  smartnews_kpi = kpi["daily"]["smartnews"]["basic"]["data"]
+  yahoo_kpi = kpi["daily"]["yahoo"]["basic"]["data"]
+  twitter_kpi = kpi["daily"]["twitter"]["basic"]["data"]
+  facebook_kpi = kpi["daily"]["facebook"]["basic"]["data"]
 
   daily_pv = daily_kpi["events"]
   daily_uu = daily_kpi["uniqueUsers"]
@@ -54,6 +66,15 @@ def write_down_daily_kpi(media_type, date_str, kpi):
   regulars_uu = segment_kpi["regulars"]["uniqueUsers"]
   fan_pv = segment_kpi["fan"]["events"]
   fan_uu = segment_kpi["fan"]["uniqueUsers"]
+
+  smartnews_pv = smartnews_kpi["events"]
+  smartnews_uu = smartnews_kpi["uniqueUsers"]
+  yahoo_pv = yahoo_kpi["events"]
+  yahoo_uu = yahoo_kpi["uniqueUsers"]
+  twitter_pv = twitter_kpi["events"]
+  twitter_uu = twitter_kpi["uniqueUsers"]
+  facebook_pv = facebook_kpi["events"]
+  facebook_uu = facebook_kpi["uniqueUsers"]
 
   # 認証
   gc = authorize()
@@ -92,4 +113,13 @@ def write_down_daily_kpi(media_type, date_str, kpi):
     elif host_name == "internal":
       worksheet.update_cell(cell.row, INTERNAL_PV_COL_NUM, host["data"]["events"])
       worksheet.update_cell(cell.row, INTERNAL_UU_COL_NUM, host["data"]["uniqueUsers"])
+
+  worksheet.update_cell(cell.row, SMARTNEWS_PV_COL_NUM, smartnews_pv)
+  worksheet.update_cell(cell.row, SMARTNEWS_UU_COL_NUM, smartnews_uu)
+  worksheet.update_cell(cell.row, YAHOO_PV_COL_NUM, yahoo_pv)
+  worksheet.update_cell(cell.row, YAHOO_UU_COL_NUM, yahoo_uu)
+  worksheet.update_cell(cell.row, TWITTER_PV_COL_NUM, twitter_pv)
+  worksheet.update_cell(cell.row, TWITTER_UU_COL_NUM, twitter_uu)
+  worksheet.update_cell(cell.row, FACEBOOK_PV_COL_NUM, facebook_pv)
+  worksheet.update_cell(cell.row, FACEBOOK_UU_COL_NUM, facebook_uu)
 
