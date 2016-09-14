@@ -86,7 +86,7 @@ def bk_segment_kpi(start_time, end_time):
   res = {}
   for segment_name in segments():
     segment = bk_segment_name_to_segment_id(segment_name)
-    request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers"], "filters":[{"type":"segment", "item":"%s"}]}\'' % (path, site_id, start_time, end_time, segment)
+    request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers","activeTime"], "filters":[{"type":"segment", "item":"%s"}]}\'' % (path, site_id, start_time, end_time, segment)
     response = commands.getoutput(request_command)
     decoded = json.loads(response)
     res.update({segment_name: decoded["data"]})
@@ -105,7 +105,7 @@ def sk_segment_kpi(start_time, end_time):
   res = {}
   for segment_name in segments():
     segment = sk_segment_name_to_segment_id(segment_name)
-    request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers"], "filters":[{"type":"segment", "item":"%s"}]}\'' % (path, site_id, start_time, end_time, segment)
+    request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers","activeTime"], "filters":[{"type":"segment", "item":"%s"}]}\'' % (path, site_id, start_time, end_time, segment)
     response = commands.getoutput(request_command)
     decoded = json.loads(response)
     res.update({segment_name: decoded["data"]})

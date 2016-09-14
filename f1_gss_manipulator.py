@@ -36,6 +36,11 @@ SMARTNEWS_UU_COL_NUM = 30
 YAHOO_UU_COL_NUM = 31
 TWITTER_UU_COL_NUM = 32
 FACEBOOK_UU_COL_NUM = 33
+FLY_BYS_AVG_DURATION_COL_NUM = 34
+OCCASIONALS_AVG_DURATION_COL_NUM = 35
+REGULARS_AVG_DURATION_COL_NUM = 36
+FAN_AVG_DURATION_COL_NUM = 37
+
 
 def authorize():
   key = json.load(open(os.path.join(os.path.expanduser('~'), '.cxense', 'gss_key.json')))
@@ -60,12 +65,16 @@ def write_down_daily_kpi(media_type, date_str, kpi):
 
   fly_bys_pv = segment_kpi["fly_bys"]["events"]
   fly_bys_uu = segment_kpi["fly_bys"]["uniqueUsers"]
+  fly_bys_avg_duration = round(float(segment_kpi["fly_bys"]["activeTime"]) * fly_bys_pv / fly_bys_uu)
   occasionals_pv = segment_kpi["occasionals"]["events"]
   occasionals_uu = segment_kpi["occasionals"]["uniqueUsers"]
+  occasionals_avg_duration = round(float(segment_kpi["occasionals"]["activeTime"]) * occasionals_pv / occasionals_uu)
   regulars_pv = segment_kpi["regulars"]["events"]
   regulars_uu = segment_kpi["regulars"]["uniqueUsers"]
+  regulars_avg_duration = round(float(segment_kpi["regulars"]["activeTime"]) * regulars_pv / regulars_uu)
   fan_pv = segment_kpi["fan"]["events"]
   fan_uu = segment_kpi["fan"]["uniqueUsers"]
+  fan_avg_duration = round(float(segment_kpi["fan"]["activeTime"]) * fan_pv / fan_uu)
 
   smartnews_pv = smartnews_kpi["events"]
   smartnews_uu = smartnews_kpi["uniqueUsers"]
@@ -122,4 +131,9 @@ def write_down_daily_kpi(media_type, date_str, kpi):
   worksheet.update_cell(cell.row, TWITTER_UU_COL_NUM, twitter_uu)
   worksheet.update_cell(cell.row, FACEBOOK_PV_COL_NUM, facebook_pv)
   worksheet.update_cell(cell.row, FACEBOOK_UU_COL_NUM, facebook_uu)
+
+  worksheet.update_cell(cell.row, FLY_BYS_AVG_DURATION_COL_NUM, fly_bys_avg_duration)
+  worksheet.update_cell(cell.row, OCCASIONALS_AVG_DURATION_COL_NUM, occasionals_avg_duration)
+  worksheet.update_cell(cell.row, REGULARS_AVG_DURATION_COL_NUM, regulars_avg_duration)
+  worksheet.update_cell(cell.row, FAN_AVG_DURATION_COL_NUM, fan_avg_duration)
 
