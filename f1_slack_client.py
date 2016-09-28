@@ -11,6 +11,15 @@ def webhook_url():
   key = config()
   return key["webhook_url"]
 
+def post_to_sk_analytics_channel(content):
+  payload_dic = {
+    "channel": '#sk_analytics',
+    "username": 'webhookbot',
+    "text": content,
+    "icon_emoji": ':ghost:',
+  }
+  r = requests.post(webhook_url(), data=json.dumps(payload_dic))
+
 def post_to_bk_analytics_channel(content):
   payload_dic = {
     "channel": '#bk_analytics',
@@ -20,9 +29,9 @@ def post_to_bk_analytics_channel(content):
   }
   r = requests.post(webhook_url(), data=json.dumps(payload_dic))
 
-def post_to_sk_analytics_channel(content):
+def post_to_bbk_analytics_channel(content):
   payload_dic = {
-    "channel": '#sk_analytics',
+    "channel": '#bbk_analytics',
     "username": 'webhookbot',
     "text": content,
     "icon_emoji": ':ghost:',
