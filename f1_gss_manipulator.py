@@ -125,8 +125,10 @@ def write_down_daily_kpi(media_type, date_str, kpi):
 
   worksheet.update_cell(cell.row, SMARTNEWS_PV_COL_NUM, smartnews_pv)
   worksheet.update_cell(cell.row, SMARTNEWS_UU_COL_NUM, smartnews_uu)
-  worksheet.update_cell(cell.row, YAHOO_PV_COL_NUM, yahoo_pv)
-  worksheet.update_cell(cell.row, YAHOO_UU_COL_NUM, yahoo_uu)
+# TODO: ImpForBBKYahoo
+  if media_type != 'BBK':
+    worksheet.update_cell(cell.row, YAHOO_PV_COL_NUM, yahoo_pv)
+    worksheet.update_cell(cell.row, YAHOO_UU_COL_NUM, yahoo_uu)
   worksheet.update_cell(cell.row, TWITTER_PV_COL_NUM, twitter_pv)
   worksheet.update_cell(cell.row, TWITTER_UU_COL_NUM, twitter_uu)
   worksheet.update_cell(cell.row, FACEBOOK_PV_COL_NUM, facebook_pv)

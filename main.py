@@ -154,3 +154,63 @@ if __name__ == "__main__":
 
     # post to slack channel
     f1_slack_client.post_to_sk_analytics_channel(f1_formatter.format_for_sk_slack(date_str, kpi))
+
+  elif media == 'BBK':
+    # request api
+    daily_kpi = f1_cxense_client.bbk_basic_kpi(start_time_for_pv, end_time_for_pv)
+    monthly_kpi = f1_cxense_client.bbk_basic_kpi(start_time_for_uu, end_time_for_uu)
+    segment_kpi = f1_cxense_client.bbk_segment_kpi(start_time_for_pv, end_time_for_pv)
+
+    all_referrer_kpi = f1_cxense_client.bbk_basic_kpi_for_each_referrer(start_time_for_pv, end_time_for_pv)
+    search_referrer_kpi = f1_cxense_client.bbk_basic_kpi_from_search(start_time_for_pv, end_time_for_pv)
+    social_referrer_kpi = f1_cxense_client.bbk_basic_kpi_from_social(start_time_for_pv, end_time_for_pv)
+    other_referrer_kpi = f1_cxense_client.bbk_basic_kpi_from_other(start_time_for_pv, end_time_for_pv)
+
+    smartnews_kpi = f1_cxense_client.bbk_basic_kpi_from_smartnews(start_time_for_pv, end_time_for_pv)
+    smartnews_ranking = f1_cxense_client.bbk_url_uu_ranking_from_smartnews(start_time_for_pv, end_time_for_pv)
+# TODO: ImpForBBKYahoo
+#    yahoo_kpi = f1_cxense_client.bbk_basic_kpi_from_yahoo(start_time_for_pv, end_time_for_pv)
+#    yahoo_ranking = f1_cxense_client.bbk_url_uu_ranking_from_yahoo(start_time_for_pv, end_time_for_pv)
+    twitter_kpi = f1_cxense_client.bbk_basic_kpi_from_twitter(start_time_for_pv, end_time_for_pv)
+    twitter_ranking = f1_cxense_client.bbk_url_uu_ranking_from_twitter(start_time_for_pv, end_time_for_pv)
+    facebook_kpi = f1_cxense_client.bbk_basic_kpi_from_facebook(start_time_for_pv, end_time_for_pv)
+    facebook_ranking = f1_cxense_client.bbk_url_uu_ranking_from_facebook(start_time_for_pv, end_time_for_pv)
+
+# TODO: ImpForBBKYahoo
+    kpi = {
+        "daily": {
+          "basic": daily_kpi,
+          "segment": segment_kpi,
+          "referrer": {
+            "all": all_referrer_kpi,
+            "search": search_referrer_kpi,
+            "social": social_referrer_kpi,
+            "other": other_referrer_kpi
+          },
+          "smartnews": {
+            "basic": smartnews_kpi,
+            "ranking": smartnews_ranking
+          },
+          "yahoo": {
+            "basic": { "data": { "events": 0, "uniqueUsers": 0 } },
+            "ranking": {}
+          },
+          "twitter": {
+            "basic": twitter_kpi,
+            "ranking": twitter_ranking
+          },
+          "facebook": {
+            "basic": facebook_kpi,
+            "ranking": facebook_ranking
+          }
+        },
+        "monthly": {
+          "basic": monthly_kpi
+        },
+    }
+
+    # write to spreadsheet
+    f1_gss_manipulator.write_down_daily_kpi(media, date_str, kpi)
+
+    # post to slack channel
+    f1_slack_client.post_to_bbk_analytics_channel(f1_formatter.format_for_bbk_slack(date_str, kpi))

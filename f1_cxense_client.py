@@ -18,6 +18,10 @@ def sk_site_id():
   key = config()
   return key["sk"]["site_id"]
 
+def bbk_site_id():
+  key = config()
+  return key["bbk"]["site_id"]
+
 def bk_flybys_id():
   key = config()
   return key["bk"]["segment"]["fly_bys"]["id"]
@@ -70,6 +74,32 @@ def sk_segment_name_to_segment_id(segment_name):
   else:
     return sk_fan_id()
 
+def bbk_flybys_id():
+  key = config()
+  return key["bbk"]["segment"]["fly_bys"]["id"]
+
+def bbk_occasionals_id():
+  key = config()
+  return key["bbk"]["segment"]["occasionals"]["id"]
+
+def bbk_regulars_id():
+  key = config()
+  return key["bbk"]["segment"]["regulars"]["id"]
+
+def bbk_fan_id():
+  key = config()
+  return key["bbk"]["segment"]["fan"]["id"]
+
+def bbk_segment_name_to_segment_id(segment_name):
+  if segment_name == 'fly_bys':
+    return bbk_flybys_id()
+  elif segment_name == 'occasionals':
+    return bbk_occasionals_id()
+  elif segment_name == 'regulars':
+    return bbk_regulars_id()
+  else:
+    return bbk_fan_id()
+
 def api_script_path():
   return os.path.join(os.path.dirname(__file__), 'cx.py')
 
@@ -111,6 +141,25 @@ def sk_segment_kpi(start_time, end_time):
     res.update({segment_name: decoded["data"]})
   return res
 
+def bbk_basic_kpi(start_time, end_time):
+  site_id = bbk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers"]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  return json.loads(response)
+
+def bbk_segment_kpi(start_time, end_time):
+  site_id = bbk_site_id()
+  path = api_script_path()
+  res = {}
+  for segment_name in segments():
+    segment = bbk_segment_name_to_segment_id(segment_name)
+    request_command = 'python %s /traffic \'{"siteId":%s, "start":%d, "stop":%d, "fields":["uniqueUsers","activeTime"], "filters":[{"type":"segment", "item":"%s"}]}\'' % (path, site_id, start_time, end_time, segment)
+    response = commands.getoutput(request_command)
+    decoded = json.loads(response)
+    res.update({segment_name: decoded["data"]})
+  return res
+
 def sk_basic_kpi_for_each_referrer(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
@@ -121,6 +170,14 @@ def sk_basic_kpi_for_each_referrer(start_time, end_time):
 
 def bk_basic_kpi_for_each_referrer(start_time, end_time):
   site_id = bk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHostClass"], "fields":["uniqueUsers"], "orderBy": "uniqueUsers"}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"]
+
+def bbk_basic_kpi_for_each_referrer(start_time, end_time):
+  site_id = bbk_site_id()
   path = api_script_path()
   request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHostClass"], "fields":["uniqueUsers"], "orderBy": "uniqueUsers"}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
@@ -143,6 +200,14 @@ def bk_basic_kpi_from_search(start_time, end_time):
   tmp = json.loads(response)
   return tmp["groups"][0]["items"]
 
+def bbk_basic_kpi_from_search(start_time, end_time):
+  site_id = bbk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHost"], "fields":["uniqueUsers"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerHostClass","item":"search"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"]
+
 def sk_basic_kpi_from_social(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
@@ -153,6 +218,14 @@ def sk_basic_kpi_from_social(start_time, end_time):
 
 def bk_basic_kpi_from_social(start_time, end_time):
   site_id = bk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHost"], "fields":["uniqueUsers"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerHostClass","item":"social"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"]
+
+def bbk_basic_kpi_from_social(start_time, end_time):
+  site_id = bbk_site_id()
   path = api_script_path()
   request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHost"], "fields":["uniqueUsers"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerHostClass","item":"social"}]}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
@@ -175,6 +248,14 @@ def bk_basic_kpi_from_other(start_time, end_time):
   tmp = json.loads(response)
   return tmp["groups"][0]["items"]
 
+def bbk_basic_kpi_from_other(start_time, end_time):
+  site_id = bbk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHost"], "fields":["uniqueUsers"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerHostClass","item":"other"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"]
+
 def sk_basic_kpi_from_smartnews(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
@@ -185,6 +266,14 @@ def sk_basic_kpi_from_smartnews(start_time, end_time):
 
 def bk_basic_kpi_from_smartnews(start_time, end_time):
   site_id = bk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHost"], "fields":["uniqueUsers"], "filters":[{"type":"event","group":"referrerHost","item":"smartnews.com"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"][0]
+
+def bbk_basic_kpi_from_smartnews(start_time, end_time):
+  site_id = bbk_site_id()
   path = api_script_path()
   request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHost"], "fields":["uniqueUsers"], "filters":[{"type":"event","group":"referrerHost","item":"smartnews.com"}]}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
@@ -207,6 +296,14 @@ def bk_url_uu_ranking_from_smartnews(start_time, end_time):
   tmp = json.loads(response)
   return tmp["groups"][0]["items"]
 
+def bbk_url_uu_ranking_from_smartnews(start_time, end_time):
+  site_id = bbk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["url"], "fields":["uniqueUsers","title"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerHost","item":"smartnews.com"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"]
+
 def sk_basic_kpi_from_yahoo(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
@@ -222,6 +319,9 @@ def bk_basic_kpi_from_yahoo(start_time, end_time):
   response = commands.getoutput(request_command)
   tmp = json.loads(response)
   return tmp["groups"][0]["items"][0]
+
+# TODO: ImpForBBKYahoo
+# bbk_basic_kpi_from_yahoo
 
 def sk_url_uu_ranking_from_yahoo(start_time, end_time):
   site_id = sk_site_id()
@@ -239,6 +339,9 @@ def bk_url_uu_ranking_from_yahoo(start_time, end_time):
   tmp = json.loads(response)
   return tmp["groups"][0]["items"]
 
+# TODO: ImpForBBKYahoo
+# bk_url_uu_ranking_from_yahoo
+
 def sk_basic_kpi_from_twitter(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
@@ -249,6 +352,14 @@ def sk_basic_kpi_from_twitter(start_time, end_time):
 
 def bk_basic_kpi_from_twitter(start_time, end_time):
   site_id = bk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerSocialNetwork"], "fields":["uniqueUsers"], "filters":[{"type":"event","group":"referrerSocialNetwork","item":"Twitter"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"][0]
+
+def bbk_basic_kpi_from_twitter(start_time, end_time):
+  site_id = bbk_site_id()
   path = api_script_path()
   request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerSocialNetwork"], "fields":["uniqueUsers"], "filters":[{"type":"event","group":"referrerSocialNetwork","item":"Twitter"}]}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
@@ -271,6 +382,14 @@ def bk_url_uu_ranking_from_twitter(start_time, end_time):
   tmp = json.loads(response)
   return tmp["groups"][0]["items"]
 
+def bbk_url_uu_ranking_from_twitter(start_time, end_time):
+  site_id = bbk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["url"], "fields":["uniqueUsers","title"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerSocialNetwork","item":"Twitter"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"]
+
 def sk_basic_kpi_from_facebook(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
@@ -287,6 +406,14 @@ def bk_basic_kpi_from_facebook(start_time, end_time):
   tmp = json.loads(response)
   return tmp["groups"][0]["items"][0]
 
+def bbk_basic_kpi_from_facebook(start_time, end_time):
+  site_id = bbk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerSocialNetwork"], "fields":["uniqueUsers"], "filters":[{"type":"event","group":"referrerSocialNetwork","item":"Facebook"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"][0]
+
 def sk_url_uu_ranking_from_facebook(start_time, end_time):
   site_id = sk_site_id()
   path = api_script_path()
@@ -297,6 +424,14 @@ def sk_url_uu_ranking_from_facebook(start_time, end_time):
 
 def bk_url_uu_ranking_from_facebook(start_time, end_time):
   site_id = bk_site_id()
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["url"], "fields":["uniqueUsers","title"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerSocialNetwork","item":"Facebook"}]}\'' % (path, site_id, start_time, end_time)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"]
+
+def bbk_url_uu_ranking_from_facebook(start_time, end_time):
+  site_id = bbk_site_id()
   path = api_script_path()
   request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["url"], "fields":["uniqueUsers","title"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerSocialNetwork","item":"Facebook"}]}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
