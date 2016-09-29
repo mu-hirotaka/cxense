@@ -41,23 +41,23 @@ if __name__ == "__main__":
   # call api 
   if media == 'BK':
     # request api
-    daily_kpi = f1_cxense_client.bk_basic_kpi(start_time_for_pv, end_time_for_pv)
-    monthly_kpi = f1_cxense_client.bk_basic_kpi(start_time_for_uu, end_time_for_uu)
-    segment_kpi = f1_cxense_client.bk_segment_kpi(start_time_for_pv, end_time_for_pv)
+    daily_kpi = f1_cxense_client.basic_kpi(media, start_time_for_pv, end_time_for_pv)
+    monthly_kpi = f1_cxense_client.basic_kpi(media, start_time_for_uu, end_time_for_uu)
+    segment_kpi = f1_cxense_client.segment_kpi(media, start_time_for_pv, end_time_for_pv)
 
-    all_referrer_kpi = f1_cxense_client.bk_basic_kpi_for_each_referrer(start_time_for_pv, end_time_for_pv)
-    search_referrer_kpi = f1_cxense_client.bk_basic_kpi_from_search(start_time_for_pv, end_time_for_pv)
-    social_referrer_kpi = f1_cxense_client.bk_basic_kpi_from_social(start_time_for_pv, end_time_for_pv)
-    other_referrer_kpi = f1_cxense_client.bk_basic_kpi_from_other(start_time_for_pv, end_time_for_pv)
+    all_referrer_kpi = f1_cxense_client.basic_kpi_for_each_referrer(media, start_time_for_pv, end_time_for_pv)
+    search_referrer_kpi = f1_cxense_client.basic_kpi_from_search(media, start_time_for_pv, end_time_for_pv)
+    social_referrer_kpi = f1_cxense_client.basic_kpi_from_social(media, start_time_for_pv, end_time_for_pv)
+    other_referrer_kpi = f1_cxense_client.basic_kpi_from_other(media, start_time_for_pv, end_time_for_pv)
 
-    smartnews_kpi = f1_cxense_client.bk_basic_kpi_from_smartnews(start_time_for_pv, end_time_for_pv)
-    smartnews_ranking = f1_cxense_client.bk_url_uu_ranking_from_smartnews(start_time_for_pv, end_time_for_pv)
-    yahoo_kpi = f1_cxense_client.bk_basic_kpi_from_yahoo(start_time_for_pv, end_time_for_pv)
-    yahoo_ranking = f1_cxense_client.bk_url_uu_ranking_from_yahoo(start_time_for_pv, end_time_for_pv)
-    twitter_kpi = f1_cxense_client.bk_basic_kpi_from_twitter(start_time_for_pv, end_time_for_pv)
-    twitter_ranking = f1_cxense_client.bk_url_uu_ranking_from_twitter(start_time_for_pv, end_time_for_pv)
-    facebook_kpi = f1_cxense_client.bk_basic_kpi_from_facebook(start_time_for_pv, end_time_for_pv)
-    facebook_ranking = f1_cxense_client.bk_url_uu_ranking_from_facebook(start_time_for_pv, end_time_for_pv)
+    smartnews_kpi = f1_cxense_client.basic_kpi_from_smartnews(media, start_time_for_pv, end_time_for_pv)
+    smartnews_ranking = f1_cxense_client.url_uu_ranking_from_smartnews(media, start_time_for_pv, end_time_for_pv)
+    yahoo_kpi = f1_cxense_client.basic_kpi_from_yahoo(media, start_time_for_pv, end_time_for_pv)
+    yahoo_ranking = f1_cxense_client.url_uu_ranking_from_yahoo(media, start_time_for_pv, end_time_for_pv)
+    twitter_kpi = f1_cxense_client.basic_kpi_from_twitter(media, start_time_for_pv, end_time_for_pv)
+    twitter_ranking = f1_cxense_client.url_uu_ranking_from_twitter(media, start_time_for_pv, end_time_for_pv)
+    facebook_kpi = f1_cxense_client.basic_kpi_from_facebook(media, start_time_for_pv, end_time_for_pv)
+    facebook_ranking = f1_cxense_client.url_uu_ranking_from_facebook(media, start_time_for_pv, end_time_for_pv)
 
     kpi = {
         "daily": {
@@ -99,23 +99,23 @@ if __name__ == "__main__":
 
   elif media == 'SK':
     # request api
-    daily_kpi = f1_cxense_client.sk_basic_kpi(start_time_for_pv, end_time_for_pv)
-    monthly_kpi = f1_cxense_client.sk_basic_kpi(start_time_for_uu, end_time_for_uu)
-    segment_kpi = f1_cxense_client.sk_segment_kpi(start_time_for_pv, end_time_for_pv)
+    daily_kpi = f1_cxense_client.basic_kpi(media, start_time_for_pv, end_time_for_pv)
+    monthly_kpi = f1_cxense_client.basic_kpi(media, start_time_for_uu, end_time_for_uu)
+    segment_kpi = f1_cxense_client.segment_kpi(media, start_time_for_pv, end_time_for_pv)
 
-    all_referrer_kpi = f1_cxense_client.sk_basic_kpi_for_each_referrer(start_time_for_pv, end_time_for_pv)
-    search_referrer_kpi = f1_cxense_client.sk_basic_kpi_from_search(start_time_for_pv, end_time_for_pv)
-    social_referrer_kpi = f1_cxense_client.sk_basic_kpi_from_social(start_time_for_pv, end_time_for_pv)
-    other_referrer_kpi = f1_cxense_client.sk_basic_kpi_from_other(start_time_for_pv, end_time_for_pv)
+    all_referrer_kpi = f1_cxense_client.basic_kpi_for_each_referrer(media, start_time_for_pv, end_time_for_pv)
+    search_referrer_kpi = f1_cxense_client.basic_kpi_from_search(media, start_time_for_pv, end_time_for_pv)
+    social_referrer_kpi = f1_cxense_client.basic_kpi_from_social(media, start_time_for_pv, end_time_for_pv)
+    other_referrer_kpi = f1_cxense_client.basic_kpi_from_other(media, start_time_for_pv, end_time_for_pv)
 
-    smartnews_kpi = f1_cxense_client.sk_basic_kpi_from_smartnews(start_time_for_pv, end_time_for_pv)
-    smartnews_ranking = f1_cxense_client.sk_url_uu_ranking_from_smartnews(start_time_for_pv, end_time_for_pv)
-    yahoo_kpi = f1_cxense_client.sk_basic_kpi_from_yahoo(start_time_for_pv, end_time_for_pv)
-    yahoo_ranking = f1_cxense_client.sk_url_uu_ranking_from_yahoo(start_time_for_pv, end_time_for_pv)
-    twitter_kpi = f1_cxense_client.sk_basic_kpi_from_twitter(start_time_for_pv, end_time_for_pv)
-    twitter_ranking = f1_cxense_client.sk_url_uu_ranking_from_twitter(start_time_for_pv, end_time_for_pv)
-    facebook_kpi = f1_cxense_client.sk_basic_kpi_from_facebook(start_time_for_pv, end_time_for_pv)
-    facebook_ranking = f1_cxense_client.sk_url_uu_ranking_from_facebook(start_time_for_pv, end_time_for_pv)
+    smartnews_kpi = f1_cxense_client.basic_kpi_from_smartnews(media, start_time_for_pv, end_time_for_pv)
+    smartnews_ranking = f1_cxense_client.url_uu_ranking_from_smartnews(media, start_time_for_pv, end_time_for_pv)
+    yahoo_kpi = f1_cxense_client.basic_kpi_from_yahoo(media, start_time_for_pv, end_time_for_pv)
+    yahoo_ranking = f1_cxense_client.url_uu_ranking_from_yahoo(media, start_time_for_pv, end_time_for_pv)
+    twitter_kpi = f1_cxense_client.basic_kpi_from_twitter(media, start_time_for_pv, end_time_for_pv)
+    twitter_ranking = f1_cxense_client.url_uu_ranking_from_twitter(media, start_time_for_pv, end_time_for_pv)
+    facebook_kpi = f1_cxense_client.basic_kpi_from_facebook(media, start_time_for_pv, end_time_for_pv)
+    facebook_ranking = f1_cxense_client.url_uu_ranking_from_facebook(media, start_time_for_pv, end_time_for_pv)
 
     kpi = {
         "daily": {
@@ -157,24 +157,24 @@ if __name__ == "__main__":
 
   elif media == 'BBK':
     # request api
-    daily_kpi = f1_cxense_client.bbk_basic_kpi(start_time_for_pv, end_time_for_pv)
-    monthly_kpi = f1_cxense_client.bbk_basic_kpi(start_time_for_uu, end_time_for_uu)
-    segment_kpi = f1_cxense_client.bbk_segment_kpi(start_time_for_pv, end_time_for_pv)
+    daily_kpi = f1_cxense_client.basic_kpi(media, start_time_for_pv, end_time_for_pv)
+    monthly_kpi = f1_cxense_client.basic_kpi(media, start_time_for_uu, end_time_for_uu)
+    segment_kpi = f1_cxense_client.segment_kpi(media, start_time_for_pv, end_time_for_pv)
 
-    all_referrer_kpi = f1_cxense_client.bbk_basic_kpi_for_each_referrer(start_time_for_pv, end_time_for_pv)
-    search_referrer_kpi = f1_cxense_client.bbk_basic_kpi_from_search(start_time_for_pv, end_time_for_pv)
-    social_referrer_kpi = f1_cxense_client.bbk_basic_kpi_from_social(start_time_for_pv, end_time_for_pv)
-    other_referrer_kpi = f1_cxense_client.bbk_basic_kpi_from_other(start_time_for_pv, end_time_for_pv)
+    all_referrer_kpi = f1_cxense_client.basic_kpi_for_each_referrer(media, start_time_for_pv, end_time_for_pv)
+    search_referrer_kpi = f1_cxense_client.basic_kpi_from_search(media, start_time_for_pv, end_time_for_pv)
+    social_referrer_kpi = f1_cxense_client.basic_kpi_from_social(media, start_time_for_pv, end_time_for_pv)
+    other_referrer_kpi = f1_cxense_client.basic_kpi_from_other(media, start_time_for_pv, end_time_for_pv)
 
-    smartnews_kpi = f1_cxense_client.bbk_basic_kpi_from_smartnews(start_time_for_pv, end_time_for_pv)
-    smartnews_ranking = f1_cxense_client.bbk_url_uu_ranking_from_smartnews(start_time_for_pv, end_time_for_pv)
+    smartnews_kpi = f1_cxense_client.basic_kpi_from_smartnews(media, start_time_for_pv, end_time_for_pv)
+    smartnews_ranking = f1_cxense_client.url_uu_ranking_from_smartnews(media, start_time_for_pv, end_time_for_pv)
 # TODO: ImpForBBKYahoo
-#    yahoo_kpi = f1_cxense_client.bbk_basic_kpi_from_yahoo(start_time_for_pv, end_time_for_pv)
-#    yahoo_ranking = f1_cxense_client.bbk_url_uu_ranking_from_yahoo(start_time_for_pv, end_time_for_pv)
-    twitter_kpi = f1_cxense_client.bbk_basic_kpi_from_twitter(start_time_for_pv, end_time_for_pv)
-    twitter_ranking = f1_cxense_client.bbk_url_uu_ranking_from_twitter(start_time_for_pv, end_time_for_pv)
-    facebook_kpi = f1_cxense_client.bbk_basic_kpi_from_facebook(start_time_for_pv, end_time_for_pv)
-    facebook_ranking = f1_cxense_client.bbk_url_uu_ranking_from_facebook(start_time_for_pv, end_time_for_pv)
+#    yahoo_kpi = f1_cxense_client.basic_kpi_from_yahoo(media, start_time_for_pv, end_time_for_pv)
+#    yahoo_ranking = f1_cxense_client.url_uu_ranking_from_yahoo(media, start_time_for_pv, end_time_for_pv)
+    twitter_kpi = f1_cxense_client.basic_kpi_from_twitter(media, start_time_for_pv, end_time_for_pv)
+    twitter_ranking = f1_cxense_client.url_uu_ranking_from_twitter(media, start_time_for_pv, end_time_for_pv)
+    facebook_kpi = f1_cxense_client.basic_kpi_from_facebook(media, start_time_for_pv, end_time_for_pv)
+    facebook_ranking = f1_cxense_client.url_uu_ranking_from_facebook(media, start_time_for_pv, end_time_for_pv)
 
 # TODO: ImpForBBKYahoo
     kpi = {
