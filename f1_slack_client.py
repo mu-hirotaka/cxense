@@ -21,6 +21,7 @@ def media_type_to_channel_name(media_type):
 
 def post_to_channel(media_type, content):
   channel_name = media_type_to_channel_name(media_type)
+#  channel_name = '#test_analytics'
   payload_dic = {
     "channel": channel_name,
     "username": 'webhookbot',
