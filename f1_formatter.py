@@ -485,3 +485,11 @@ def format_for_bbk_slack(date_str, kpi):
   messages.append(format_facebook_kpi(facebook_kpi))
   messages.append(format_bbk_montyly_kpi(date_str, monthly_kpi))
   return "".join(messages)
+
+def format_for_slack(media_type, date_str, kpi):
+  if media_type == 'SK':
+    return format_for_sk_slack(date_str, kpi)
+  elif media_type == 'BK':
+    return format_for_bk_slack(date_str, kpi)
+  elif media_type == 'BBK':
+    return format_for_bbk_slack(date_str, kpi)
