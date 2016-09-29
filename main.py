@@ -95,7 +95,7 @@ if __name__ == "__main__":
     f1_gss_manipulator.write_down_daily_kpi(media, date_str, kpi)
 
     # post to slack channel
-    f1_slack_client.post_to_bk_analytics_channel(f1_formatter.format_for_bk_slack(date_str, kpi))
+    f1_slack_client.post_to_channel(media, f1_formatter.format_for_bk_slack(date_str, kpi))
 
   elif media == 'SK':
     # request api
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     f1_gss_manipulator.write_down_daily_kpi(media, date_str, kpi)
 
     # post to slack channel
-    f1_slack_client.post_to_sk_analytics_channel(f1_formatter.format_for_sk_slack(date_str, kpi))
+    f1_slack_client.post_to_channel(media, f1_formatter.format_for_sk_slack(date_str, kpi))
 
   elif media == 'BBK':
     # request api
@@ -213,4 +213,4 @@ if __name__ == "__main__":
     f1_gss_manipulator.write_down_daily_kpi(media, date_str, kpi)
 
     # post to slack channel
-    f1_slack_client.post_to_bbk_analytics_channel(f1_formatter.format_for_bbk_slack(date_str, kpi))
+    f1_slack_client.post_to_channel(media, f1_formatter.format_for_bbk_slack(date_str, kpi))

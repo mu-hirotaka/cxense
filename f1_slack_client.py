@@ -11,27 +11,18 @@ def webhook_url():
   key = config()
   return key["webhook_url"]
 
-def post_to_sk_analytics_channel(content):
-  payload_dic = {
-    "channel": '#sk_analytics',
-    "username": 'webhookbot',
-    "text": content,
-    "icon_emoji": ':ghost:',
-  }
-  r = requests.post(webhook_url(), data=json.dumps(payload_dic))
+def media_type_to_channel_name(media_type):
+  if media_type == 'SK':
+    return '#sk_analytics'
+  elif media_type == 'BK':
+    return '#bk_analytics'
+  elif media_type == 'BBK':
+    return '#bbk_analytics'
 
-def post_to_bk_analytics_channel(content):
+def post_to_channel(media_type, content):
+  channel_name = media_type_to_channel_name(media_type)
   payload_dic = {
-    "channel": '#bk_analytics',
-    "username": 'webhookbot',
-    "text": content,
-    "icon_emoji": ':ghost:',
-  }
-  r = requests.post(webhook_url(), data=json.dumps(payload_dic))
-
-def post_to_bbk_analytics_channel(content):
-  payload_dic = {
-    "channel": '#bbk_analytics',
+    "channel": channel_name,
     "username": 'webhookbot',
     "text": content,
     "icon_emoji": ':ghost:',
