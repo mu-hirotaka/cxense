@@ -263,7 +263,10 @@ def format_smartnews_kpi(kpi):
   messages.append("＜SmartNews＞（PV:" + format(all_pv, ",d") + " UU:" + format(all_uu, ",d") + "）\n")
   messages.append("　[UUランキング]\n")
   for idx,elem in enumerate(ranking):
-    title = elem["title"].encode('utf-8')
+    if elem.get('title'):
+      title = elem["title"].encode('utf-8')
+    else:
+      title = 'no title'
     pv = elem["data"]["events"] 
     uu = elem["data"]["uniqueUsers"] 
     messages.append("　　PV:" + format(pv, ",d") + " UU:" + format(uu, ",d") + " " + title + "\n")
@@ -281,7 +284,10 @@ def format_yahoo_kpi(kpi):
   messages.append("＜Yahoo＞（PV:" + format(all_pv, ",d") + " UU:" + format(all_uu, ",d") + "）\n")
   messages.append("　[UUランキング]\n")
   for idx,elem in enumerate(ranking):
-    title = elem["title"].encode('utf-8')
+    if elem.get('title'):
+      title = elem["title"].encode('utf-8')
+    else:
+      title = 'no title'
     pv = elem["data"]["events"] 
     uu = elem["data"]["uniqueUsers"] 
     messages.append("　　PV:" + format(pv, ",d") + " UU:" + format(uu, ",d") + " " + title + "\n")
@@ -299,7 +305,10 @@ def format_twitter_kpi(kpi):
   messages.append("＜Twitter＞（PV:" + format(all_pv, ",d") + " UU:" + format(all_uu, ",d") + "）\n")
   messages.append("　[UUランキング]\n")
   for idx,elem in enumerate(ranking):
-    title = elem["title"].encode('utf-8')
+    if elem.get('title'):
+      title = elem["title"].encode('utf-8')
+    else:
+      title = 'no title'
     pv = elem["data"]["events"] 
     uu = elem["data"]["uniqueUsers"] 
     messages.append("　　PV:" + format(pv, ",d") + " UU:" + format(uu, ",d") + " " + title + "\n")
@@ -317,7 +326,10 @@ def format_facebook_kpi(kpi):
   messages.append("＜Facebook＞（PV:" + format(all_pv, ",d") + " UU:" + format(all_uu, ",d") + "）\n")
   messages.append("　[UUランキング]\n")
   for idx,elem in enumerate(ranking):
-    title = elem["title"].encode('utf-8')
+    if elem.get('title'):
+      title = elem["title"].encode('utf-8')
+    else:
+      title = 'no title'
     pv = elem["data"]["events"] 
     uu = elem["data"]["uniqueUsers"] 
     messages.append("　　PV:" + format(pv, ",d") + " UU:" + format(uu, ",d") + " " + title + "\n")
