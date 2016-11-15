@@ -189,7 +189,7 @@ def url_uu_ranking_from_smartnews(media_type, start_time, end_time):
 def basic_kpi_from_yahoo(media_type, start_time, end_time):
   site_id = media_type_to_site_id(media_type)
   path = api_script_path()
-  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerSearchEngine"], "fields":["uniqueUsers"], "filters":[{"type":"event","group":"referrerSearchEngine","item":"Yahoo"}]}\'' % (path, site_id, start_time, end_time)
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["referrerHost"], "fields":["uniqueUsers"], "filters":[{"type":"event","group":"referrerHost","item":"headlines.yahoo.co.jp"}]}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
   tmp = json.loads(response)
   return tmp["groups"][0]["items"][0]
@@ -197,7 +197,7 @@ def basic_kpi_from_yahoo(media_type, start_time, end_time):
 def url_uu_ranking_from_yahoo(media_type, start_time, end_time):
   site_id = media_type_to_site_id(media_type)
   path = api_script_path()
-  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["url"], "fields":["uniqueUsers","title"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerSearchEngine","item":"Yahoo"}]}\'' % (path, site_id, start_time, end_time)
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["url"], "fields":["uniqueUsers","title"], "orderBy": "uniqueUsers", "filters":[{"type":"event","group":"referrerHost","item":"headlines.yahoo.co.jp"}]}\'' % (path, site_id, start_time, end_time)
   response = commands.getoutput(request_command)
   tmp = json.loads(response)
   return tmp["groups"][0]["items"]
