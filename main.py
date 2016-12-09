@@ -168,15 +168,13 @@ if __name__ == "__main__":
 
     smartnews_kpi = f1_cxense_client.basic_kpi_from_smartnews(media, start_time_for_pv, end_time_for_pv)
     smartnews_ranking = f1_cxense_client.url_uu_ranking_from_smartnews(media, start_time_for_pv, end_time_for_pv)
-# TODO: ImpForBBKYahoo
-#    yahoo_kpi = f1_cxense_client.basic_kpi_from_yahoo(media, start_time_for_pv, end_time_for_pv)
-#    yahoo_ranking = f1_cxense_client.url_uu_ranking_from_yahoo(media, start_time_for_pv, end_time_for_pv)
+    yahoo_kpi = f1_cxense_client.basic_kpi_from_yahoo(media, start_time_for_pv, end_time_for_pv)
+    yahoo_ranking = f1_cxense_client.url_uu_ranking_from_yahoo(media, start_time_for_pv, end_time_for_pv)
     twitter_kpi = f1_cxense_client.basic_kpi_from_twitter(media, start_time_for_pv, end_time_for_pv)
     twitter_ranking = f1_cxense_client.url_uu_ranking_from_twitter(media, start_time_for_pv, end_time_for_pv)
     facebook_kpi = f1_cxense_client.basic_kpi_from_facebook(media, start_time_for_pv, end_time_for_pv)
     facebook_ranking = f1_cxense_client.url_uu_ranking_from_facebook(media, start_time_for_pv, end_time_for_pv)
 
-# TODO: ImpForBBKYahoo
     kpi = {
         "daily": {
           "basic": daily_kpi,
@@ -192,8 +190,8 @@ if __name__ == "__main__":
             "ranking": smartnews_ranking
           },
           "yahoo": {
-            "basic": { "data": { "events": 0, "uniqueUsers": 0 } },
-            "ranking": {}
+            "basic": yahoo_kpi,
+            "ranking": yahoo_ranking
           },
           "twitter": {
             "basic": twitter_kpi,

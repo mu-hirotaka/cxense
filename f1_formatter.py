@@ -396,8 +396,7 @@ def format_for_bbk_slack(date_str, kpi):
   social_referrer_kpi = kpi["daily"]["referrer"]["social"]
   other_referrer_kpi = kpi["daily"]["referrer"]["other"]
   smartnews_kpi = kpi["daily"]["smartnews"]
-# TODO: ImpForBBKYahoo
-#  yahoo_kpi = kpi["daily"]["yahoo"]
+  yahoo_kpi = kpi["daily"]["yahoo"]
   twitter_kpi = kpi["daily"]["twitter"]
   facebook_kpi = kpi["daily"]["facebook"]
 
@@ -407,8 +406,7 @@ def format_for_bbk_slack(date_str, kpi):
   messages.append(format_segment_kpi(segment_kpi))
   messages.append(format_kpi_for_each_referrer(all_referrer_kpi, search_referrer_kpi, social_referrer_kpi, other_referrer_kpi))
   messages.append(format_smartnews_kpi(smartnews_kpi))
-# TODO: ImpForBBKYahoo
-#  messages.append(format_yahoo_kpi(yahoo_kpi))
+  messages.append(format_yahoo_kpi(yahoo_kpi))
   messages.append(format_twitter_kpi(twitter_kpi))
   messages.append(format_facebook_kpi(facebook_kpi))
   messages.append(format_montyly_kpi('BBK', date_str, monthly_kpi))
