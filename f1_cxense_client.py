@@ -233,3 +233,11 @@ def url_uu_ranking_from_facebook(media_type, start_time, end_time):
   response = commands.getoutput(request_command)
   tmp = json.loads(response)
   return tmp["groups"][0]["items"]
+
+def pv_and_uu_by_url(media_type, start_time, end_time, url):
+  site_id = media_type_to_site_id(media_type)
+  path = api_script_path()
+  request_command = 'python %s /traffic/event \'{"siteId":%s, "start":%d, "stop":%d, "groups":["url"], "fields":["uniqueUsers","title"], "filters":[{"type":"event","group":"url","item":"%s"}]}\'' % (path, site_id, start_time, end_time, url)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["groups"][0]["items"][0]
