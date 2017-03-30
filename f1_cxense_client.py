@@ -241,3 +241,11 @@ def pv_and_uu_by_url(media_type, start_time, end_time, url):
   response = commands.getoutput(request_command)
   tmp = json.loads(response)
   return tmp["groups"][0]["items"][0]
+
+def content_by_url(media_type, url):
+  site_id = media_type_to_site_id(media_type)
+  path = api_script_path()
+  request_command = 'python %s /document/search \'{"siteId":%s, "query":"query(url:\\\"%s\\\")"}\'' % (path, site_id, url)
+  response = commands.getoutput(request_command)
+  tmp = json.loads(response)
+  return tmp["matches"][0]
